@@ -43,18 +43,18 @@ export function map(f) {
 // map2 : (a -> b -> c) -> Array a -> Array b -> Array c
 export function map2(f) {
     return (xs) => (ys) => {
-        return [xs, ys]
-            .sort((a, b) => a.length - b.length)[0]
-            .map((x, i) => f(x)(ys[i]))
+        const arrs = [xs, ys].sort((a, b) => a.length - b.length)
+
+        return arrs[0].map((x, i) => f(x)(arrs[1][i]))
     }
 }
 
 // map3 : (a -> b -> c -> d) -> Array a -> Array b -> Array c -> Array d
 export function map3(f) {
     return (xs) => (ys) => (zs) => {
-        return [xs, ys, zs]
-            .sort((a, b) => a.length - b.length)[0]
-            .map((x, i) => f(x)(ys[i])(zs[i]))
+        const arrs = [xs, ys, zs].sort((a, b) => a.length - b.length)
+
+        return arrs[0].map((x, i) => f(x)(arrs[1][i])(arrs[2][i]))
     }
 }
 
@@ -129,6 +129,12 @@ export function tail(arr) {
 export function drop(n) {
     return (arr) => {
         return arr.filter((_, i) => i >= n)
+    }
+}
+
+export function take(n) {
+    return (arr) => {
+        return arr.filter((_, i) => i < n)
     }
 }
 
