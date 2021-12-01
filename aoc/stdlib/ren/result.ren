@@ -1,0 +1,26 @@
+import 'ren/maybe' as Maybe
+
+pub enum Result
+    = #ok _
+    | #err _
+
+pub fun fromMaybe = e m =>
+    Maybe.map #ok m
+        |> Maybe.withDefault (#err e)
+
+pub fun map = f r =>
+    when r
+        is #ok a => #ok (f a)
+        is #err e => #err e
+
+pub fun andThen = f r =>
+    when r
+        is #ok a => f a
+        is #err e => #err e
+
+pub fun withDefault = b r =>
+    when r
+        is #ok a => a
+        is #err _ => b
+
+pub let unwrap = withDefault ()

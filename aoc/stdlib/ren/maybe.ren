@@ -1,0 +1,20 @@
+pub enum Maybe
+    = #just _
+    | #nothing
+
+pub fun map = f m =>
+    when m
+        is #just a  => #just (f a)
+        is #nothing => #nothing
+
+pub fun andThen = f m =>
+    when m
+        is #just a => f a
+        is #nothing => #nothing
+
+pub fun withDefault = b m =>
+    when m
+        is #just a => a
+        is #nothing => b
+
+pub let unwrap = withDefault ()

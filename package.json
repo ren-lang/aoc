@@ -1,0 +1,23 @@
+{
+  "name": "ren-aoc",
+  "description": "An Advent of Code runner for Ren.",
+  "source": "src/main.js",
+  "main": "dist/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "build": "parcel build",
+    "watch": "parcel watch"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "parcel": "^2.0.1"
+  },
+  "engines": {
+    "node": ">= 12"
+  },
+  "devDependencies": {
+    "@parcel/transformer-elm": "^2.0.1",
+    "elm": "^0.19.1-5"
+  },
+  "shouldOptimize": true
+}
