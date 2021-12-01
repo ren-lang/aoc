@@ -43,19 +43,30 @@ export function map(f) {
 // map2 : (a -> b -> c) -> Array a -> Array b -> Array c
 export function map2(f) {
     return (xs) => (ys) => {
-        const arrs = [xs, ys].sort((a, b) => a.length - b.length)
+        const shortestLength = [xs.length, ys.length].sort((a, b) => a - b)[0]
+        const arr = []
 
-        return arrs[0].map((x, i) => f(x)(arrs[1][i]))
+        for (let i = 0; i < shortestLength; i++) {
+            arr.push(f(xs[i])(ys[i]))
+        }
+
+        return arr
     }
 }
 
 // map3 : (a -> b -> c -> d) -> Array a -> Array b -> Array c -> Array d
 export function map3(f) {
     return (xs) => (ys) => (zs) => {
-        const arrs = [xs, ys, zs].sort((a, b) => a.length - b.length)
+        const shortestLength = [xs.length, ys.length, zs.length].sort((a, b) => a - b)[0]
+        const arr = []
 
-        return arrs[0].map((x, i) => f(x)(arrs[1][i])(arrs[2][i]))
+        for (let i = 0; i < shortestLength; i++) {
+            arr.push(f(xs[i])(ys[i])(zs[i]))
+        }
+
+        return arr
     }
+
 }
 
 // indexedMap : (Number -> a -> b) -> Array a -> Array b
