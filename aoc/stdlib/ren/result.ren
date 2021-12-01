@@ -1,4 +1,4 @@
-import 'ren/maybe' as Maybe
+import './maybe' as Maybe
 
 pub enum Result
     = #ok _

@@ -1,4 +1,4 @@
-import * as Maybe from '/Users/pd-andy/dev/compilers/ren-aoc/aoc/stdlib/ren/maybe.ren.mjs'
+import * as Maybe from './maybe.ren.mjs'
 
 export function $ok (a) {
     return ['#ok', a]
