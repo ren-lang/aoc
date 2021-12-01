@@ -48,7 +48,7 @@ compiler.ports.toFs.subscribe(({ $, ...data }) => {
                         if (name.includes(`${year}/${day}`))
                             import(name).then(({ main }) => {
                                 Process.chdir(Path.dirname(name))
-                                main && main(Process.argv.slice(2))
+                                main && console.log(main(Process.argv.slice(2)))
                             })
 
                         break

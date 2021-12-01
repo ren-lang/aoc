@@ -6650,7 +6650,7 @@ $503e9ca78180412c$var$compiler.ports.toFs.subscribe(({ $: $1 , ...data1 })=>{
                                 });
                                 if (name.includes(`${year}/${day}`)) import(name).then(({ main: main  })=>{
                                     $5swOt$process.chdir($5swOt$path.dirname(name));
-                                    main && main($5swOt$process.argv.slice(2));
+                                    main && console.log(main($5swOt$process.argv.slice(2)));
                                 });
                                 break;
                             }
