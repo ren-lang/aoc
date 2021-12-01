@@ -3,3 +3,7 @@ node_modules
 
 .parcel-cache
 .vscode
+
+aoc
+!aoc/stblib/*
+!aoc/stdlib/ren/*
