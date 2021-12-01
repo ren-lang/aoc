@@ -93,7 +93,10 @@ addStdlib { imports, declarations } =
             , Ren.Language.Import "ren/string" [ "String" ] []
             ]
     in
-    { imports = stdlib |> List.filter (\imprt -> Basics.not (List.member imprt imports)) |> (++) imports
+    { imports =
+        stdlib
+            |> List.filter (\{ name } -> Basics.not (List.any (.name >> (==) name) imports))
+            |> (++) imports
     , declarations = declarations
     }
 
