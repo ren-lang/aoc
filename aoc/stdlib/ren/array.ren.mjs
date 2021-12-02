@@ -90,6 +90,42 @@ export function foldr(f) {
     }
 }
 
+export function $continue(a) {
+    return ['#continue', a]
+}
+
+export function $stop(a) {
+    return ['#stop', a]
+}
+
+export function foldlUntil(f) {
+    return (a) => (arr) => {
+        for (let i = 0; i < arr.length; i++) {
+            const [$, b] = f(a)(arr[i])
+
+            if ($ == '#stop') {
+                return b
+            } else {
+                a = b
+            }
+        }
+    }
+}
+
+export function foldrUntil(f) {
+    return (a) => (arr) => {
+        for (let i = arr.length - 1; i >= 0; i--) {
+            const [$, b] = f(a)(arr[i])
+
+            if ($ == '#stop') {
+                return b
+            } else {
+                a = b
+            }
+        }
+    }
+}
+
 // filter : (a -> Boolean) -> Array a -> Array a
 export function filter(f) {
     return (arr) => {
@@ -189,4 +225,8 @@ export function isArray(a) {
 //
 export function sum(arr) {
     return arr.reduce((x, y) => x + y, 0)
+}
+
+export function product(arr) {
+    return arr.reduce((x, y) => x * y, 1)
 }

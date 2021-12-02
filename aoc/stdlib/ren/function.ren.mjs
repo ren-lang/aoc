@@ -25,3 +25,8 @@ export function compose(f) {
         return g(f(x))
     }
 }
+
+//
+export function identity(a) {
+    return a
+}
