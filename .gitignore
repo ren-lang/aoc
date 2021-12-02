@@ -4,6 +4,4 @@ node_modules
 .parcel-cache
 .vscode
 
-aoc
-!aoc/stblib/*
-!aoc/stdlib/ren/*
+aoc/[0-9][0-9][0-9][0-9]
