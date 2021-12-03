@@ -245,6 +245,6 @@ export function max(arr) {
 }
 
 // min : Array Number -> Number 
-export function max(arr) {
+export function min(arr) {
     return arr.reduce((x, y) => Math.min(x, y))
 }
