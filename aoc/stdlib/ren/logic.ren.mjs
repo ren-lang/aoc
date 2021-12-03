@@ -19,7 +19,7 @@ export function xor(a) {
     }
 }
 
-//
+// not : Boolean -> Boolean
 export function not(a) {
     return !a
 }

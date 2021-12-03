@@ -15,7 +15,6 @@ export function andThen(f) {
     }
 }
 
-
 // andCatch : (e -> x) -> Promise e a -> Promise x a
 export function andCatch(f) {
     return promise => {

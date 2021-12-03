@@ -1,4 +1,5 @@
 // CREATING ARRAYS -------------------------------------------------------------
+
 // singleton : a -> Array a
 export function singleton(a) {
     return [a]
@@ -33,6 +34,7 @@ export function join(xs) {
 }
 
 // TRANSFORMING ARRAYS ---------------------------------------------------------
+
 // map : (a -> b) -> Array a -> Array b
 export function map(f) {
     return (arr) => {
@@ -85,8 +87,8 @@ export function foldl(f) {
 
 // foldr : (b -> a -> b) -> b -> Array a -> b
 export function foldr(f) {
-    return (a) => (arr) => {
-        return arr.reduceRight(f, a)
+    return (x) => (arr) => {
+        return arr.reduceRight((b, a) => f(b)(a), x)
     }
 }
 
@@ -129,7 +131,7 @@ export function foldrUntil(f) {
 // filter : (a -> Boolean) -> Array a -> Array a
 export function filter(f) {
     return (arr) => {
-        arr.filter(f)
+        return arr.filter(f)
     }
 }
 
@@ -156,29 +158,14 @@ export function forEach(f) {
     }
 }
 
-//
-// head : Array a -> Maybe a
-export function head(arr) {
-    return arr.length >= 1
-        ? ['#just', arr[0]]
-        : ['#nothing']
-}
-
-export function unsafeHead(arr) {
-    return arr[0]
-}
-
-export function tail(arr) {
-    const [, ...tail] = arr
-    return tail
-}
-
+// drop : Number -> Array a -> Array a
 export function drop(n) {
     return (arr) => {
         return arr.filter((_, i) => i >= n)
     }
 }
 
+// take : Number -> Array a -> Array a
 export function take(n) {
     return (arr) => {
         return arr.filter((_, i) => i < n)
@@ -194,6 +181,19 @@ export function length(arr) {
 // reverse : Array a -> Array a
 export function reverse(arr) {
     return [...arr].reverse()
+}
+
+// head : Array a -> Maybe a
+export function head(arr) {
+    return arr.length >= 1
+        ? ['#just', arr[0]]
+        : ['#nothing']
+}
+
+// tail : Array a -> Array a
+export function tail(arr) {
+    const [, ...tail] = arr
+    return tail
 }
 
 // member : a -> Array a
@@ -217,16 +217,34 @@ export function all(f) {
     }
 }
 
-//
+// isArray : * -> Bool
 export function isArray(a) {
     return Array.isArray(a)
 }
 
 //
+export function sort(arr) {
+    return [...arr].sort()
+}
+
+// MATHS -----------------------------------------------------------------------
+
+// sum : Array Number -> Number
 export function sum(arr) {
     return arr.reduce((x, y) => x + y, 0)
 }
 
+// product : Array Number -> Number
 export function product(arr) {
     return arr.reduce((x, y) => x * y, 1)
+}
+
+// max : Array Number -> Number 
+export function max(arr) {
+    return arr.reduce((x, y) => Math.max(x, y))
+}
+
+// min : Array Number -> Number 
+export function max(arr) {
+    return arr.reduce((x, y) => Math.min(x, y))
 }

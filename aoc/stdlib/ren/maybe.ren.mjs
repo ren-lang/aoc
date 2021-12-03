@@ -18,6 +18,20 @@ export function map (f) {
     }
 }
 
+export function map2 (f) {
+    return (mA) => (mB) => {
+        return (($) => {
+            if (Array.isArray($) && $.length >= 2 && Array.isArray($[0]) && $[0].length >= 2 && $[0][0] == '#just' && Array.isArray($[1]) && $[1].length >= 2 && $[1][0] == '#just') {
+                var a = $[0][1]
+                var b = $[1][1]
+                return $just (f (a) (b))
+            }
+
+            return $nothing
+        })([mA, mB])
+    }
+}
+
 export function andThen (f) {
     return (m) => {
         if (Array.isArray(m) && m.length >= 2 && m[0] == '#just') {

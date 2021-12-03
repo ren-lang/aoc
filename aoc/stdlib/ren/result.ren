@@ -5,27 +5,40 @@ pub enum Result
     = #ok _
     | #err _
 
+// fromMaybe : e -> Maybe a -> Result e a
 pub fun fromMaybe = e m =>
     Maybe.map #ok m
         |> Maybe.withDefault (#err e)
 
+// map : (a -> b) -> Result e a -> Result e b
 pub fun map = f r =>
     when r
         is #ok a => #ok (f a)
         is #err e => #err e
 
+pub fun map2 = f rA rB =>
+    when [ rA, rB ]
+        is [ #ok a, #ok b ] => #ok (f a b)
+        is [ #ok a, #err a] => #err e
+        is [ #err e, _ ] => #err e
+
+// andThen : (a -> Result e b) -> Result e a -> Result e b
 pub fun andThen = f r =>
     when r
         is #ok a => f a
         is #err e => #err e
 
+// withDefault : a -> Result e a -> a
 pub fun withDefault = b r =>
     when r
         is #ok a => a
         is #err _ => b
 
+// unwrap : Result e a -> a
 pub let unwrap = withDefault ()
 
+// isOk : Result e a -> Boolean
 pub fun isOk = result => when result is #ok _ => true else => false
 
+// isErr : Result e a -> Boolean
 pub let isErr = isOk >> not

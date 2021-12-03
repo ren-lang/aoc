@@ -1,6 +1,6 @@
 import * as Maybe from './maybe'
 
-// get : String -> Object -> Maybe a
+// get : String -> * -> Maybe a
 export function get(key) {
     return (obj) => {
         return key in obj
@@ -9,14 +9,14 @@ export function get(key) {
     }
 }
 
-// set : String -> a -> Object -> Object
+// set : String -> a -> * -> *
 export function set(key) {
     return (a) => (obj) => {
         return { ...obj, [key]: a }
     }
 }
 
-// has : String -> Object -> Boolean
+// has : String -> * -> Boolean
 export function has(key) {
     return (obj) => {
         return key in obj

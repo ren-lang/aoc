@@ -1,6 +1,7 @@
 import * as Fs from 'fs'
 
-//
+// open : String -> { sync: true }  -> Result Error String
+// open : String -> { sync: false } -> Promise Error String
 export function open(path) {
     return ({ sync = false }) => {
         if (sync) {

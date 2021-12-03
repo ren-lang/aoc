@@ -1,7 +1,4 @@
 // add : Number -> Number -> Number
-// add : Number -> String -> String
-// add : String -> Number -> String
-// add : String -> String -> String
 export function add(x) {
     return (y) => {
         return x + y
