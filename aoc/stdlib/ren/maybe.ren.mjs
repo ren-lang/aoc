@@ -61,3 +61,17 @@ export function withDefault (b) {
 }
 
 export var unwrap = withDefault ()
+
+export function or (mB) {
+    return (mA) => {
+        if (Array.isArray(mA) && mA.length >= 2 && mA[0] == '#just') {
+            var a = mA[1]
+            return $just (a)
+        }
+
+        if (Array.isArray(mA) && mA.length >= 1 && mA[0] == '#nothing') {
+            
+            return mB
+        }
+    }
+}

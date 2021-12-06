@@ -1,4 +1,4 @@
-import * as Maybe from './maybe'
+import * as Maybe from './maybe.ren.mjs'
 
 // get : String -> * -> Maybe a
 export function get(key) {
@@ -20,5 +20,12 @@ export function set(key) {
 export function has(key) {
     return (obj) => {
         return key in obj
+    }
+}
+
+//
+export function construct(o) {
+    return (args) => {
+        return new o(...args)
     }
 }

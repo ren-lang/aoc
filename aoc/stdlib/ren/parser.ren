@@ -1,0 +1,189 @@
+import './array' as Array exposing { #continue, #stop }
+import './console' as Console
+import './function' as Function
+import './maybe' as Maybe exposing { #just, #nothing }
+import './result' as Result exposing { #ok, #err }
+import './string' as String
+
+pub enum Error
+    = #badParser _
+    | #custom _
+    | #eof
+    | #expected _ _
+    | #unexpectedInput _
+
+// Ground-break stuff, this. Essentially just a flipped version of `(|>)` but it's
+// nice to have domain-specific names for these things. The implementation of a
+// parser isn't the consumer's responsibility to know!
+pub fun run = p input => p input |> Result.map (fun [ output ] => output)
+
+pub fun succeed = a input => {
+    ret #ok [ a, input ]
+}
+
+pub fun fail = message _ => {
+    ret #err (#custom message)
+}
+
+pub fun failWith = error _ => {
+    ret #err error
+}
+
+pub fun lazy = parser input => {
+    ret parser () input
+}
+
+// PRIMITIVE PARSERS -----------------------------------------------------------
+
+pub fun any = input => {
+    ret when String.take 1 input
+        is #just char => #ok [ char, String.drop 1 input ]
+        is #nothing   => #err #eof
+}
+
+pub fun eof = input => {
+    ret if String.isEmpty input then
+        #ok [ (), input ]
+
+    else
+        #err (#expected "End of file" input)
+}
+
+pub fun string = s input => {
+    let length = String.length s
+    let expect = `A string that starts with '${s}'`
+
+    ret if String.startsWith s input then
+        #ok [ s, String.drop length input ]
+
+    else
+        #err (#expected expect input)
+}
+
+pub fun spaces = input => {
+    ret input
+        |> takeWhile (fun c => c == ' ')
+        |> map (Function.always ())
+}
+
+pub let whitespace = takeWhile (fun c => c == ' ' || c == '\\t' || c == '\\n')
+
+pub let int = {
+    let isDigit = fun c => Array.member c [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ]
+
+    ret takeIfAndWhile isDigit
+        |> map String.toNumber
+        |> andThen fromMaybe
+}
+
+pub let float = {
+    let isDigit = fun c => Array.member c [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ]
+    
+    ret succeed (fun x y => `${x}.${y}`)
+        |> keep (takeIfAndWhile isDigit)
+        |> drop (string '.')
+        |> keep (takeIfAndWhile isDigit)
+        |> map String.toNumber
+        |> andThen fromMaybe
+}
+
+pub fun maybe = parser input => {
+    ret parser input
+        |> Result.map (fun [ result, output ] => [ #just result, output ])
+        |> Result.withDefault ([ #nothing, input ])
+        |> #ok
+}
+
+// UNWRAPPING OTHER TYPES ------------------------------------------------------
+
+pub fun fromMaybe = value => {
+    ret Maybe.map succeed value
+        |> Maybe.withDefault (#err (#unexpectedInput ""))
+}
+
+pub fun fromResult = value => {
+    ret Result.map succeed value
+        |> Result.withDefault (#err (#unexpectedInput ""))
+}
+
+// PREDICATE PARSERS -----------------------------------------------------------
+
+pub fun takeWhile = predicate input => {
+    let recurse = fun c => {
+        ret takeWhile predicate |> map (String.append c)
+    }
+
+    ret when String.take 1 input
+        is #just c if predicate c => recurse c (String.drop 1 input)
+        is #just _ => #ok [ '', input ]
+        is #nothing => #ok [ '', '' ]
+}
+
+pub fun takeIf = predicate input => {
+    ret when String.take 1 input
+        is #just c if predicate c => #ok [ c, String.drop 1 input ]
+        is #just _ => #err (#unexpectedInput input)
+        is #nothing => #err #eof
+}
+
+pub fun takeIfAndWhile = predicate => {
+    ret succeed String.append
+        |> keep (takeIf predicate)
+        |> keep (takeWhile predicate)
+}
+
+// COMBINATORS -----------------------------------------------------------------
+
+
+pub fun andThen = f parser input => {
+    ret parser input
+        |> Result.andThen (fun [ value, next ] => f value next)
+}
+
+pub fun map = f parser input => {
+    ret parser input
+        |> Result.map (fun [ a, s ] => [ f a, s ])
+}
+
+pub fun map2 = f parserA parserB input => {
+    ret parserA input
+        |> Result.andThen (fun [ a, s1 ] => {
+            ret parserB s1 
+                |> Result.map (fun [ b, s2 ] => [ f a b, s2 ])
+        })
+}
+
+pub fun oneOf = parsers input => {
+    ret Array.foldlUntil
+        (fun _ parser => {
+            let result = parser input
+
+            ret if Result.isOk result then
+                #stop result
+
+            else
+                #continue result
+        })
+        (#err (#badParser 'The list of parsers supplied to `oneOf` is empty.'))
+        parsers
+}
+
+pub fun many = separator parser input => {
+    // We know recursing on `many` will always produce an #ok result, so we can
+    // safely pattern match the function arg and not worry about the error case.
+    let recurse = fun val (#ok [ arr, input ]) => #ok [ val :: arr, input ]
+
+    ret when drop separator parser input
+        is #ok [ value, next ] => many separator parser next |> recurse value
+        is #err _ => #ok [ [], input ]
+}
+
+// CHAINING PARSERS ------------------------------------------------------------
+
+pub fun keep = parser mapper => {
+    ret map2 (fun f a => f a) mapper parser
+}
+
+pub fun drop = ignorer keeper => {
+    ret map2 Function.discard ignorer keeper
+}

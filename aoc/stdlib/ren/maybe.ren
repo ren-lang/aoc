@@ -27,3 +27,9 @@ pub fun withDefault = b m =>
 
 // unwrap : Maybe a -> a
 pub let unwrap = withDefault ()
+
+//
+pub fun or = mB mA =>
+    when mA
+        is #just a => #just a
+        is #nothing => mB

@@ -40,7 +40,7 @@ export function eq(x) {
 // notEq : a -> a -> Boolean
 export function notEq(a) {
     return (b) => {
-        return a != b
+        return !eq(a)(b)
     }
 }
 

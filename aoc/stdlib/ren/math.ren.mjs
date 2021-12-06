@@ -39,3 +39,12 @@ export function mod(x) {
         return x % y
     }
 }
+
+//
+export function incr(n) {
+    return n + 1
+}
+
+export function decr(n) {
+    return n - 1
+}

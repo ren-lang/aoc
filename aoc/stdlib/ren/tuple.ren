@@ -1,0 +1,13 @@
+pub fun pair = a b => [ a, b ]
+
+pub fun from = a => [ a, a ]
+
+pub fun mapFirst = f [ a, b ] => [ f a, b ]
+
+pub fun mapSecond = f [ a, b ] => [ a, f b ]
+
+pub fun first = [ a, _ ] => a
+
+pub fun second = [ _, b ] => b
+
+pub fun apply = f [ a, b ] => f a b

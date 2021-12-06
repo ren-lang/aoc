@@ -1,3 +1,4 @@
+import './array' as Array exposing { #continue, stop }
 import './logic' exposing { not }
 import './maybe' as Maybe
 
@@ -42,3 +43,6 @@ pub fun isOk = result => when result is #ok _ => true else => false
 
 // isErr : Result e a -> Boolean
 pub let isErr = isOk >> not
+
+// sequence : Array (Result e a) -> Result e (Array a)
+pub fun sequence = results => Array.foldr (fun rs a => map2 (::) a rs) (#ok []) results

@@ -1,3 +1,4 @@
+import * as Array from './array.ren.mjs'
 import {not} from  './logic.ren.mjs'
 import * as Maybe from './maybe.ren.mjs'
 
@@ -92,3 +93,9 @@ export function isOk (result) {
 }
 
 export var isErr = (($) => not (isOk ($)))
+
+export function sequence (results) {
+    return Array.foldr ((rs) => (a) => map2 (Array.cons) (a) (rs))
+        ($ok ([]))
+        (results)
+}

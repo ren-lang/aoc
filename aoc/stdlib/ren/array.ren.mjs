@@ -1,3 +1,6 @@
+import * as Compare from './compare.ren.mjs'
+import { $just, $nothing } from './maybe.ren.mjs'
+
 // CREATING ARRAYS -------------------------------------------------------------
 
 // singleton : a -> Array a
@@ -24,6 +27,14 @@ export function cons(head) {
     return (tail) => {
         return [head, ...tail]
     }
+}
+
+export function uncons(arr) {
+    const [h, ...t] = arr
+
+    return h === undefined
+        ? $nothing
+        : $just([h, t])
 }
 
 // join : Array a -> Array a -> Array a
@@ -128,6 +139,12 @@ export function foldrUntil(f) {
     }
 }
 
+export function iterate(n) {
+    return (f) => (a) => {
+        return repeat(n)(f).reduce((b, f) => f(b), a)
+    }
+}
+
 // filter : (a -> Boolean) -> Array a -> Array a
 export function filter(f) {
     return (arr) => {
@@ -158,6 +175,16 @@ export function forEach(f) {
     }
 }
 
+export function updateAt(i) {
+    return (f) => (arr) => {
+        let newArr = [...arr]
+
+        newArr[i] = f(newArr[i])
+
+        return newArr
+    }
+}
+
 // drop : Number -> Array a -> Array a
 export function drop(n) {
     return (arr) => {
@@ -172,10 +199,21 @@ export function take(n) {
     }
 }
 
+// partition : Number -> Array a -> [ Array a, Array a ]
+export function partition(n) {
+    return (arr) => {
+        return [take(n)(arr), drop(n)(arr)]
+    }
+}
+
 // UTILS -----------------------------------------------------------------------
 // length : Array a -> Number
 export function length(arr) {
     return arr.length
+}
+
+export function isEmpty(arr) {
+    return arr.length === 0
 }
 
 // reverse : Array a -> Array a
@@ -186,8 +224,8 @@ export function reverse(arr) {
 // head : Array a -> Maybe a
 export function head(arr) {
     return arr.length >= 1
-        ? ['#just', arr[0]]
-        : ['#nothing']
+        ? $just(arr[0])
+        : $nothing
 }
 
 // tail : Array a -> Array a
@@ -199,7 +237,7 @@ export function tail(arr) {
 // member : a -> Array a
 export function member(a) {
     return (arr) => {
-        return arr.includes(a)
+        return arr.some(b => Compare.eq(a)(b))
     }
 }
 
@@ -231,7 +269,7 @@ export function sort(arr) {
 
 // sum : Array Number -> Number
 export function sum(arr) {
-    return arr.reduce((x, y) => x + y, 0)
+    return arr.reduce((x, y) => x + y)
 }
 
 // product : Array Number -> Number
