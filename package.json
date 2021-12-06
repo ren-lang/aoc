@@ -5,8 +5,8 @@
   "main": "dist/main.js",
   "type": "commonjs",
   "scripts": {
-    "build": "parcel build",
-    "watch": "parcel watch"
+    "build": "NODE_ENV=production PARCEL_ELM_NO_DEBUG=1 parcel build --no-source-maps",
+    "watch": "parcel watch --no-source-maps"
   },
   "license": "MIT",
   "dependencies": {
@@ -17,7 +17,8 @@
   },
   "devDependencies": {
     "@parcel/transformer-elm": "^2.0.1",
-    "elm": "^0.19.1-5"
+    "elm": "^0.19.1-5",
+    "performance-measure": "^1.0.3"
   },
   "shouldOptimize": true
 }
