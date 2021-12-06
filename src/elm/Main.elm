@@ -107,7 +107,10 @@ resolveImports stdlib { imports, declarations } =
         List.map
             (\{ path, name, bindings } ->
                 { path =
-                    if String.startsWith "." path then
+                    if String.startsWith "ext " path then
+                        String.replace "ext " "" path
+
+                    else if String.startsWith "." path then
                         path ++ ".ren.mjs"
 
                     else
