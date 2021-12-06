@@ -39,26 +39,38 @@ compiler.ports.toFs.subscribe(({ $, ...data }) => {
         case 'WriteFiles': {
             const { files } = data
 
+            let filesToRun = []
+            let hasError = false
+
             Object.entries(files).forEach(([path, { $, ...data }]) => {
                 switch ($) {
                     case 'Ok': {
                         const name = `${path}.mjs`
                         Fs.writeFileSync(name, data.src, { encoding: 'utf8' })
 
-                        if (name.includes(`${year}/${day}`))
-                            import(name).then(({ main }) => {
-                                Process.chdir(Path.dirname(name))
-                                main && console.log(main(Process.argv.slice(2)))
-                            })
+                        if (name.includes(`${year}/${day}`)) filesToRun.push(name)
 
                         break
                     }
 
                     case 'Err': {
+                        hasError = true
+
                         console.error(`Error while compiling ${path}:`)
                         console.error(data.err, '\n')
                     }
                 }
+            })
+
+            if (!hasError) filesToRun.forEach(name => {
+                import(name).then(({ main }) => {
+                    Process.chdir(Path.dirname(name))
+
+                    main && console.log(typeof main === 'function'
+                        ? main(Process.argv.slice(2))
+                        : main
+                    )
+                })
             })
         }
     }
