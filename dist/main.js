@@ -5389,7 +5389,7 @@ type alias Process =
         };
     });
     var $the_sett$elm_pretty_printer$Pretty$line = A2($the_sett$elm_pretty_printer$Internals$Line, ' ', '');
-    var $ren_lang$compiler$Pretty$Extra$doubeLine = A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, $the_sett$elm_pretty_printer$Pretty$line);
+    var $ren_lang$compiler$Pretty$Extra$doubleLine = A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, $the_sett$elm_pretty_printer$Pretty$line);
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$esPrecedenceFromInfixOperator = function(operator) {
         switch(operator.$){
             case 'Add':
@@ -5696,12 +5696,18 @@ type alias Process =
             return A2($elm$core$List$cons, hd, spersed);
         }
     });
+    var $the_sett$elm_pretty_printer$Pretty$lines = $the_sett$elm_pretty_printer$Pretty$join($the_sett$elm_pretty_printer$Pretty$line);
     var $elm$core$List$isEmpty = function(xs) {
         if (!xs.b) return true;
         else return false;
     };
-    var $the_sett$elm_pretty_printer$Pretty$lines = $the_sett$elm_pretty_printer$Pretty$join($the_sett$elm_pretty_printer$Pretty$line);
+    var $ren_lang$compiler$Pretty$Extra$mapNonEmptyList = F2(function(list, mapper) {
+        return $elm$core$List$isEmpty(list) ? $the_sett$elm_pretty_printer$Pretty$empty : mapper(list);
+    });
     var $the_sett$elm_pretty_printer$Pretty$space = $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr(' '));
+    var $ren_lang$compiler$Pretty$Extra$when = F2(function(condition, doc) {
+        return condition ? doc : $the_sett$elm_pretty_printer$Pretty$empty;
+    });
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromAccess = F2(function(expr, accessors) {
         return A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$join, $the_sett$elm_pretty_printer$Pretty$empty, A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromAccessor, accessors)), $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpressionToSingleTerm(expr));
     });
@@ -5724,7 +5730,7 @@ type alias Process =
         } else return $the_sett$elm_pretty_printer$Pretty$parens($ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(arg));
     };
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromBlock = F2(function(bindings, expr) {
-        return A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string('()'), $the_sett$elm_pretty_printer$Pretty$parens(A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('}')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(expr), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string('return '), A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Pretty$Extra$doubeLine, A2($the_sett$elm_pretty_printer$Pretty$join, $the_sett$elm_pretty_printer$Pretty$empty, A2($elm$core$List$intersperse, $ren_lang$compiler$Pretty$Extra$doubeLine, A2($elm$core$List$map, A2($elm$core$Basics$composeR, $elm$core$Tuple$pair($ren_lang$compiler$Ren$Language$Private), $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromDeclaration), bindings))))))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, $the_sett$elm_pretty_printer$Pretty$string('() => {')))))));
+        return A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string('()'), $the_sett$elm_pretty_printer$Pretty$parens(A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('}')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(expr), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string('return '), A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Pretty$Extra$doubleLine, A2($the_sett$elm_pretty_printer$Pretty$join, $the_sett$elm_pretty_printer$Pretty$empty, A2($elm$core$List$intersperse, $ren_lang$compiler$Pretty$Extra$doubleLine, A2($elm$core$List$map, A2($elm$core$Basics$composeR, $elm$core$Tuple$pair($ren_lang$compiler$Ren$Language$Private), $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromDeclaration), bindings))))))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, $the_sett$elm_pretty_printer$Pretty$string('() => {')))))));
     });
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromCase = F2(function(ident, _v34) {
         fromCase: while(true){
@@ -5736,10 +5742,10 @@ type alias Process =
                     var patterns = pattern.a;
                     var matchPatterns = A2($ren_lang$compiler$Ren$Compiler$Emit$ESModule$matchPatternsFromArrayDestructure, ident, patterns);
                     var checks = function(checks_) {
-                        return $elm$core$List$isEmpty(checks_) ? $the_sett$elm_pretty_printer$Pretty$empty : A2($the_sett$elm_pretty_printer$Pretty$join, $the_sett$elm_pretty_printer$Pretty$string(' && '), checks_);
+                        return A2($ren_lang$compiler$Pretty$Extra$mapNonEmptyList, checks_, $the_sett$elm_pretty_printer$Pretty$join($the_sett$elm_pretty_printer$Pretty$string(' && ')));
                     }(A2($elm$core$List$filter, $elm$core$Basics$neq($the_sett$elm_pretty_printer$Pretty$empty), A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$checkFromMatchPattern, matchPatterns)));
                     var bindings = function(bindings_) {
-                        return $elm$core$List$isEmpty(bindings_) ? $the_sett$elm_pretty_printer$Pretty$empty : $the_sett$elm_pretty_printer$Pretty$lines(bindings_);
+                        return A2($ren_lang$compiler$Pretty$Extra$mapNonEmptyList, bindings_, $the_sett$elm_pretty_printer$Pretty$lines);
                     }(A2($elm$core$List$filter, $elm$core$Basics$neq($the_sett$elm_pretty_printer$Pretty$empty), A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$bindingFromMatchPattern, matchPatterns)));
                     return A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('}')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, function() {
                         if (guard.$ === 'Just') {
@@ -5754,15 +5760,15 @@ type alias Process =
                             var expr = guard.a;
                             return A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('}')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(body), $the_sett$elm_pretty_printer$Pretty$string('return '))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('{')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$space, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$parens($ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(expr)), $the_sett$elm_pretty_printer$Pretty$string('if ')))))))));
                         } else return A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(body), $the_sett$elm_pretty_printer$Pretty$string('return ')));
-                    }(), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(' = $'), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(name), $the_sett$elm_pretty_printer$Pretty$string('var ')))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('{')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$space, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$parens(A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(name), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(' == '), ident))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$space, $the_sett$elm_pretty_printer$Pretty$string('if ')))))))))));
+                    }(), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(' = $'), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(name), $the_sett$elm_pretty_printer$Pretty$string('var '))))))));
                 case 'ObjectDestructure':
                     var patterns = pattern.a;
                     var matchPatterns = A2($ren_lang$compiler$Ren$Compiler$Emit$ESModule$matchPatternsFromObjectDestructure, ident, patterns);
                     var checks = function(checks_) {
-                        return $elm$core$List$isEmpty(checks_) ? $the_sett$elm_pretty_printer$Pretty$empty : A2($the_sett$elm_pretty_printer$Pretty$join, $the_sett$elm_pretty_printer$Pretty$string(' && '), checks_);
+                        return A2($ren_lang$compiler$Pretty$Extra$mapNonEmptyList, checks_, $the_sett$elm_pretty_printer$Pretty$join($the_sett$elm_pretty_printer$Pretty$string(' && ')));
                     }(A2($elm$core$List$filter, $elm$core$Basics$neq($the_sett$elm_pretty_printer$Pretty$empty), A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$checkFromMatchPattern, matchPatterns)));
                     var bindings = function(bindings_) {
-                        return $elm$core$List$isEmpty(bindings_) ? $the_sett$elm_pretty_printer$Pretty$empty : $the_sett$elm_pretty_printer$Pretty$lines(bindings_);
+                        return A2($ren_lang$compiler$Pretty$Extra$mapNonEmptyList, bindings_, $the_sett$elm_pretty_printer$Pretty$lines);
                     }(A2($elm$core$List$filter, $elm$core$Basics$neq($the_sett$elm_pretty_printer$Pretty$empty), A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$bindingFromMatchPattern, matchPatterns)));
                     return A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('}')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, function() {
                         if (guard.$ === 'Just') {
@@ -5805,7 +5811,7 @@ type alias Process =
                             var expr = guard.a;
                             return A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('}')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(body), $the_sett$elm_pretty_printer$Pretty$string('return '))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('{')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$space, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$parens($ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(expr)), $the_sett$elm_pretty_printer$Pretty$string('if ')))))))));
                         } else return A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(body), $the_sett$elm_pretty_printer$Pretty$string('return ')));
-                    }(), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, ident, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(' = '), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(name), $the_sett$elm_pretty_printer$Pretty$string('var '))))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('{')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$space, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$parens(A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(typename), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(' == '), A2($the_sett$elm_pretty_printer$Pretty$a, ident, $the_sett$elm_pretty_printer$Pretty$string('typeof '))))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$space, $the_sett$elm_pretty_printer$Pretty$string('if ')))))))))));
+                    }(), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($the_sett$elm_pretty_printer$Pretty$a, ident, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(' = '), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(name), $the_sett$elm_pretty_printer$Pretty$string('var '))))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$char(_Utils_chr('{')), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$space, A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$parens(A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Pretty$Extra$singleQuotes(typename), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$string(' == '), A2($the_sett$elm_pretty_printer$Pretty$a, ident, $the_sett$elm_pretty_printer$Pretty$string('typeof '))))), A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$space, $the_sett$elm_pretty_printer$Pretty$string('if ')))))))))));
                 default:
                     if (guard.$ === 'Just') {
                         var expr1 = guard.a;
@@ -5837,7 +5843,7 @@ type alias Process =
         }
     };
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromEnum = F3(function(visibility, _v31, variants) {
-        return A2($the_sett$elm_pretty_printer$Pretty$join, $ren_lang$compiler$Pretty$Extra$doubeLine, A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromVariant(visibility), variants));
+        return A2($the_sett$elm_pretty_printer$Pretty$join, $ren_lang$compiler$Pretty$Extra$doubleLine, A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromVariant(visibility), variants));
     });
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression = function(expression) {
         switch(expression.$){
@@ -5938,11 +5944,23 @@ type alias Process =
         }
     });
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromFunctionBody = F2(function(insideBlock, body) {
-        if (body.$ === 'Match' && body.a.$ === 'Identifier') {
-            var ident = body.a.a;
-            var cases = body.b;
-            return insideBlock ? A2($ren_lang$compiler$Ren$Compiler$Emit$ESModule$matchBody, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromIdentifier(ident), cases) : $the_sett$elm_pretty_printer$Pretty$braces(A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($ren_lang$compiler$Ren$Compiler$Emit$ESModule$matchBody, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromIdentifier(ident), cases)), $the_sett$elm_pretty_printer$Pretty$line)));
-        } else return A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(body), insideBlock ? $the_sett$elm_pretty_printer$Pretty$string('return ') : $the_sett$elm_pretty_printer$Pretty$empty);
+        var _return = insideBlock ? $the_sett$elm_pretty_printer$Pretty$string('return ') : $the_sett$elm_pretty_printer$Pretty$empty;
+        _v23$2: while(true)switch(body.$){
+            case 'Match':
+                if (body.a.$ === 'Identifier') {
+                    var ident = body.a.a;
+                    var cases = body.b;
+                    return insideBlock ? A2($ren_lang$compiler$Ren$Compiler$Emit$ESModule$matchBody, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromIdentifier(ident), cases) : $the_sett$elm_pretty_printer$Pretty$braces(A2($the_sett$elm_pretty_printer$Pretty$a, $the_sett$elm_pretty_printer$Pretty$line, A2($the_sett$elm_pretty_printer$Pretty$a, A2($the_sett$elm_pretty_printer$Pretty$indent, 4, A2($ren_lang$compiler$Ren$Compiler$Emit$ESModule$matchBody, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromIdentifier(ident), cases)), $the_sett$elm_pretty_printer$Pretty$line)));
+                } else break _v23$2;
+            case 'Literal':
+                if (body.a.$ === 'Object') {
+                    var object = body.a;
+                    return A2($the_sett$elm_pretty_printer$Pretty$a, A2($ren_lang$compiler$Pretty$Extra$when, !insideBlock, $the_sett$elm_pretty_printer$Pretty$string(')')), A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromLiteral(object), A2($the_sett$elm_pretty_printer$Pretty$a, A2($ren_lang$compiler$Pretty$Extra$when, !insideBlock, $the_sett$elm_pretty_printer$Pretty$string('(')), A2($ren_lang$compiler$Pretty$Extra$when, insideBlock, $the_sett$elm_pretty_printer$Pretty$string('return ')))));
+                } else break _v23$2;
+            default:
+                break _v23$2;
+        }
+        return A2($the_sett$elm_pretty_printer$Pretty$a, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromExpression(body), A2($ren_lang$compiler$Pretty$Extra$when, insideBlock, $the_sett$elm_pretty_printer$Pretty$string('return ')));
     });
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromInfix = F3(function(operator, lhs, rhs) {
         var fromInfixOp = $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromInfixOperand(operator);
@@ -6064,7 +6082,7 @@ type alias Process =
         ])))) : A3($ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromFunction, $ren_lang$compiler$Ren$Language$Name(sanitisedTag), A2($elm$core$List$map, $ren_lang$compiler$Ren$Language$Name, slotArgs), $ren_lang$compiler$Ren$Language$Literal($ren_lang$compiler$Ren$Language$Array(A2($elm$core$List$cons, $ren_lang$compiler$Ren$Language$Literal($ren_lang$compiler$Ren$Language$String(tag)), A2($elm$core$List$map, A2($elm$core$Basics$composeL, $ren_lang$compiler$Ren$Language$Identifier, $ren_lang$compiler$Ren$Language$Local), slotArgs))))), $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromVisibility(visibility));
     });
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$matchBody = F2(function(ident, cases) {
-        return A2($the_sett$elm_pretty_printer$Pretty$join, $the_sett$elm_pretty_printer$Pretty$empty, A2($elm$core$List$intersperse, $ren_lang$compiler$Pretty$Extra$doubeLine, A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromCase(ident), cases)));
+        return A2($the_sett$elm_pretty_printer$Pretty$join, $the_sett$elm_pretty_printer$Pretty$empty, A2($elm$core$List$intersperse, $ren_lang$compiler$Pretty$Extra$doubleLine, A2($elm$core$List$map, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$fromCase(ident), cases)));
     });
     var $ren_lang$compiler$Ren$Compiler$Emit$ESModule$matchPatternsFromArrayDestructure = F2(function(path, patterns) {
         return A2($elm$core$List$cons, $ren_lang$compiler$Ren$Compiler$Emit$ESModule$IsArray({
