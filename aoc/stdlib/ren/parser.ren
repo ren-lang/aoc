@@ -60,12 +60,7 @@ pub fun string = s input => {
         #err (#expected expect input)
 }
 
-pub fun spaces = input => {
-    ret input
-        |> takeWhile (fun c => c == ' ')
-        |> map (Function.always ())
-}
-
+pub let spaces = takeWhile (fun c => c == ' ')
 pub let whitespace = takeWhile (fun c => c == ' ' || c == '\\t' || c == '\\n')
 
 pub let int = {
@@ -173,7 +168,10 @@ pub fun many = separator parser input => {
     // safely pattern match the function arg and not worry about the error case.
     let recurse = fun val (#ok [ arr, input ]) => #ok [ val :: arr, input ]
 
-    ret when drop separator parser input
+    ret if input == '' then
+        #ok [ [], input ]
+    
+    else when drop separator parser input
         is #ok [ value, next ] => many separator parser next |> recurse value
         is #err _ => #ok [ [], input ]
 }

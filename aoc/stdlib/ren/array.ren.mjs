@@ -89,6 +89,12 @@ export function indexedMap(f) {
     }
 }
 
+export function flatMap(f) {
+    return (arr) => {
+        return arr.flatMap(f)
+    }
+}
+
 // foldl : (b -> a -> b) -> b -> Array a -> b
 export function foldl(f) {
     return (x) => (arr) => {
@@ -263,6 +269,13 @@ export function isArray(a) {
 //
 export function sort(arr) {
     return [...arr].sort()
+}
+
+//
+export function sortBy(f) {
+    return (arr) => {
+        return [...arr].sort((a, b) => f(a) - f(b))
+    }
 }
 
 // MATHS -----------------------------------------------------------------------

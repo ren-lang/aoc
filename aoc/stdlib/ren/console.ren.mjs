@@ -1,6 +1,6 @@
 // log : a -> a
 export function log(message) {
-    console.log(message)
+    console.dir(message, { depth: null })
     return message
 }
 

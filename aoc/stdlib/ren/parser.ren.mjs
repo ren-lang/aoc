@@ -91,9 +91,7 @@ export function string (s) {
     }
 }
 
-export function spaces (input) {
-    return map (Function.always ()) (takeWhile ((c) => c == ' ') (input))
-}
+export var spaces = takeWhile ((c) => c == ' ')
 
 export var whitespace = takeWhile ((c) => c == ' ' || c == '\t' || c == '\n')
 
@@ -235,18 +233,22 @@ export function many (separator) {
         return (() => {
             var recurse = (val) => ([_, [arr, input]]) => $ok ([[val, ...arr], input])
 
-            return (($) => {
-                if (Array.isArray($) && $.length >= 2 && $[0] == '#ok' && Array.isArray($[1]) && $[1].length >= 2) {
-                    var value = $[1][0]
-                    var next = $[1][1]
-                    return (recurse (value)) (many (separator) (parser) (next))
-                }
+            return input == ''
+                ? $ok ([[], input])
+                : (($) => {
+                    if (Array.isArray($) && $.length >= 2 && $[0] == '#ok' && Array.isArray($[1]) && $[1].length >= 2) {
+                        var value = $[1][0]
+                        var next = $[1][1]
+                        return (recurse (value)) (many (separator)
+                                (parser)
+                                (next))
+                    }
 
-                if (Array.isArray($) && $.length >= 2 && $[0] == '#err') {
-                    
-                    return $ok ([[], input])
-                }
-            })(drop (separator) (parser) (input))
+                    if (Array.isArray($) && $.length >= 2 && $[0] == '#err') {
+                        
+                        return $ok ([[], input])
+                    }
+                })(drop (separator) (parser) (input))
         })()
     }
 }

@@ -99,3 +99,12 @@ export function sequence (results) {
         ($ok ([]))
         (results)
 }
+
+export function toMaybe (result) {
+    if (Array.isArray(result) && result.length >= 2 && result[0] == '#ok') {
+        var a = result[1]
+        return Maybe.$just (a)
+    }
+
+    return Maybe.$nothing
+}
